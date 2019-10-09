@@ -6,9 +6,10 @@ and commercial CI/CD platforms and related tools are both permitted and
 encouraged to adopt support for this specification.
 
 By adopting support for this specification, implementors will advance the spec
-authors' two primary (and related) objectives:
+authors' three primary (and inter-related) objectives:
 
 1. Enabling pipeline portability
+1. Containerizing the development environment
 1. Commoditizing the CI/CD marketplace
 
 ## Pipeline Portability
@@ -49,6 +50,37 @@ common, ubiquitous domain-specific language-- if only such a thing existed. The
 drakespec seeks to bring just such a DSL into existence, then, by encouraging
 new and existing CI/CD providers to support the specification, usher in an era
 of "write once, run anywhere" pipelines.
+
+## Containerizing the Development Environment
+
+Having contributed to innumerable software projects-- both open source and
+commercial-- the drakespec authors have observed how difficult it is to ensure
+all of a project's contributors (many of whom may contribute on a casual or
+part-time basis) work with a _uniform_ or "certified" development environment.
+Too often, this difficulty leads to cases of "it worked on my machine," and
+precious contributor and maintainer hours wasted troubleshooting the system
+disparities that caused a test to pass locally but fail in CI. Even when this
+problem doesn't arise, careful curation of the languages, libraries, tools, etc.
+present on a contributors laptop may have been required to head it off. Worse,
+the required dependencies for building or testing one project may conflict with
+the dependencies for building or testing another project. _No one has time for
+this._
+
+This problem and its less than ideal solution have been written about
+extensively
+[here](https://medium.com/swlh/containerized-development-101-9e9711397f12) by
+one of the drakespec's authors.
+
+Through containerization of a pipeline's constituent jobs, the drakespec's
+authors wish to minimize the degree of setup required to execute tests, builds,
+or other development-related taskes for any drakespec-compliant project. More
+importantly, by ensuring pipeline portability, the authors wish to unlock the
+ability for contributors to such projects to execute individual jobs or entire
+pipelines _locally_ before ever opening a PR.
+
+By ensuring _parity_ between the local development environent and CI,
+contributors can be confident that jobs and pipelines that execute correctly
+locally will do so as well in CI.
 
 ## Commoditizing the CI/CD Marketplace
 
