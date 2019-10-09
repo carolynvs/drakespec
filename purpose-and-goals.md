@@ -67,10 +67,10 @@ The perceived benefits of this commoditization are many:
 1. No lock-in:
 
     1. With little or no effort, developers can leave slow or expensive
-       drake-compliant providers for faster or more cost-effective
-       drake-compliant providers.
+       drakespec-compliant providers for faster or more cost-effective
+       drakespec-compliant providers.
 
-    1. Developers can try new or different drake-compliant providers with
+    1. Developers can try new or different drakespec-compliant providers with
        minimal effort and no risk.
 
 1. Better providers emerge:
