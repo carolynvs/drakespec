@@ -4,7 +4,8 @@ The __DrakeSpec__ is an _open specification_ that describes:
 
 1. A domain-specific language for declaratively defining CI/CD pipelines
 
-1. Runtime requirements for CI/CD platforms that execute those pipelines
+1. Requirements for software products that produce, consume, or execute those
+   pipelines
 
 Open source and commercial CI/CD platforms (and related tools) are both
 permitted and encouraged to adopt support for this specification.
