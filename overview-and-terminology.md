@@ -54,6 +54,17 @@ instead of beginning a sentence, "drakespec-compliant platforms..." consider
 beginning the sentence, "All drakespec-compliant platforms..." or,
 situationally, "Most drakespec-compliant platforms..."
 
+### The drake DSL
+
+__The drake DSL__ is a YAML-based domain specific language for the declarative
+definition of [__drakespec-compliant__](#drakespec-compliant)
+[__pipelines__](#pipelines).
+
+As a matter of style, "drake DSL" is never capitalized when written and is
+typically prefixed with the definite article "the," especially wherever required
+to comply with typical English capitalization rules (e.g. at the beginning of a
+sentence; e.g. "The drake DSL is ...").
+
 ### Pipelines
 
 __Pipelines__ are the heart and soul of the drakespec. A pipeline is a directed
