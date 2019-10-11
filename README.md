@@ -1,18 +1,21 @@
 # drakespec
 
-__drakespec__ is an _open specification_ that describes a domain-specific
-language for declaratively defining CI/CD pipelines.
+The __drakespec__ is an _open specification_ that describes:
 
-All manner of open source and commercial CI/CD platforms and related tools are
-both permitted and encouraged to adopt support for this specification.
+1. A domain-specific language for declaratively defining CI/CD pipelines
+
+1. Runtime requirements for CI/CD platforms that execute those pipelines
+
+Open source and commercial CI/CD platforms (and related tools) are both
+permitted and encouraged to adopt support for this specification.
 
 Together, we will usher in a new era of pipeline portability!
 
 ## THIS SPEC IS HIGHLY VOLATILE!
 
-This specification is currently under heavy development. Implementors should
-be warned that breaking changes to this specification are likely at any point
-up until its eventual 1.0 release.
+This specification is currently under heavy development. Adopters should be
+warned that breaking changes to this specification are likely at any point up
+until its eventual 1.0 release.
 
 ## Table of Contents
 

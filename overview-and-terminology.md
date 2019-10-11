@@ -78,8 +78,8 @@ unit testing, compiling source to a binary, or uploading a build artifact to
 object storage. These are common examples, but jobs are open-ended in terms of
 what they might accomplish. Pipelines are _compositions_ of jobs.
 
-Jobs are such a critical concept within the __drakespec__ that they are
-discussed in more detail in their own [section](jobs.md).
+Jobs are such a critical concept within the drakespec that they are discussed in
+more detail in their own [section](jobs.md).
 
 ### Pipeline Triggers
 
@@ -101,7 +101,7 @@ are discussed in more detail in their own [section](pipeline-triggers.md).
 
 __CI/CD platforms__ references a class of software intended to effect continuous
 integration and/or continuous delivery through the execution of
-[pipelines](#pipelines) or other, similar constructs.
+[__pipelines__](#pipelines) or other, similar constructs.
 
 When appearing in the text of the drakespec, "CI/CD platforms" should _not_ be
 presumed to exclusively reference platforms that implement the drakespec. When
