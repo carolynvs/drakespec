@@ -1,14 +1,14 @@
 # Overview and Terminology
 
 This section presents a high-level overview of the drakespec. It is a reasonable
-and common starting point for developers wishing to implement
-drakespec-compliant platforms or utilities as well as developers wishing to
-author drakespec-compliant pipelines.
+starting point for developers wishing to implement drakespec-compliant platforms
+or utilities as well as developers wishing to declaratively define
+drakespec-compliant pipelines.
 
 ## Glossary of Terms
 
-This section defines and/or disambiguates key terms that are used throughout
-the remainder of the specification.
+This section defines key terms that are used throughout the remainder of the
+specification.
 
 Note that terms in this section are not organized alphabetically. Rather, they
 are introduced in an order the authors consider sensible for readers previously
@@ -87,7 +87,7 @@ discrete events that prompt execution of a [__pipeline__](#pipelines). The
 drakespec defines triggers, generically, as a concept, but deliberately avoids
 enumerating any specific triggers that
 [__drakespec-compliant__](#drakespec-compliant) platforms are obligated to
-implement. In this manner, triggers are, conceptually, an extension point within
+support. In this manner, triggers are, conceptually, an extension point within
 the drakespec, allowing for the emergence of many triggers-- themselves based on
 (ideally) open specifications-- which drakespec-compliant
 [__platforms__](#ci/cd-platforms) and [__utilities__](#utilities) may elect to

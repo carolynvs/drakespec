@@ -4,11 +4,12 @@ The __drakespec__ is an _open specification_ that describes:
 
 1. A domain-specific language for declaratively defining CI/CD pipelines
 
-1. Runtime requirements for CI/CD platforms that execute those pipelines
+1. Requirements for software products that produce, consume, or execute those
+   pipelines
 
-Open source and commercial CI/CD platforms (and related tools) are both
-permitted and encouraged to adopt support for this specification. By doing so,
-they will advance the spec authors' three primary (and inter-related)
+Open source and commercial CI/CD platforms and all manner of related utilities
+are both permitted and encouraged to adopt support for this specification. By
+doing so, they will advance the spec authors' three primary (and inter-related)
 objectives:
 
 1. Enabling pipeline portability
@@ -180,7 +181,7 @@ executed within OCI containers. Two practical corollaries follow from this:
 Being general pupose, drakespec-compliant pipelines can accommodate a very wide
 range of use cases, but that range excludes, for instance, executing builds or
 tests that rely on OS kernels other than Linux or Windows, since only those two
-OS families are supported by current OCI implementations. If, for example, your
+OS families are supported by current OCI runtimes. If, for example, your
 project is an iOS app that can only be compiled and tested on Mac OS, you are
 unlikely to find drakespec-compliant pipelines useful.
 
@@ -221,11 +222,11 @@ to adoption for would-be drakespec-compliant CI/CD platforms.
 
 ### It's _Not_ a Build Tool
 
-It is, perhaps, too easy to mistake certain implementations of the drakespec
-(devdrake in particular) as a "build tool." The drake "origin story" can both
-confirm the ease with which this mistake can be made-- because the drakespec
-authors once made the same mistake themselves-- and can also dispel any
-confusion regarding this matter.
+It is, perhaps, too easy to mistake certain drakespec-compliant software
+products (devdrake in particular) as a "build tool." The drake "origin story"
+can both confirm the ease with which this mistake can be made-- because the
+drakespec authors once made the same mistake themselves-- and can also dispel
+any confusion regarding this matter.
 
 The concept that evolved into the drakespec was born among Go developers who
 were consumate Docker and `make` users with a strong preference for isolating
@@ -264,12 +265,12 @@ concept behind drake ceased to involve replacing `make` and became exclusively
 about achieving pipeline portability. The name "drake," however, stuck because,
 let's be honest-- it's a cool name.
 
-The moral of the origin story is that, in the minds of the drakespec's authors,
-implementations of the specification are _not_ intended to replace existing
+The moral of the origin story is that the specification's authors have concluded
+that drakespec-compliant software is not intended to replace or compete with
 build tools. If you're using `make` and you like `make`, _keep using it_. If
 you're a Ruby developer and you're using `rake` and you like `rake`, _keep using
 it_. If you're using Bazel and you like it, _keep using it_. Build tools you are
-already happy with should, generally speaking, work just fine with _within_ a
+already happy with should, generally speaking, work just fine _within_ a
 well-designed drakespec-compliant pipeline.
 
 ### Relationship to Kubernetes
@@ -298,11 +299,12 @@ _It must be explicitly stated that the drakespec's relationship to Kubernetes
 runs no deeper than this._
 
 A new generation of CI/CD platforms (including the likes of Argo and Tekton
-Pipelines) is emerging that model jobs, pipelines, etc. as Kubernetes resources
+Pipelines) is emerging that models jobs, pipelines, etc. as Kubernetes resources
 (i.e. CRDs-- custom resource definitions). While the drakespec authors stop
-short of overtly criticizing this approach, it should be noted that this is an
+short of overtly criticizing this approach, it should be noted that this
 approach was considered for drakespec and rejected because the authors wished
 neither to constrain the implementation of drakespec-compliant platforms by
-mandating a dependency on Kubernetes (devdrake, for instance does not rely on
-Kubernetes) nor presume or require pipeline authors to be competent Kubernetes
-users.
+mandating a dependency on Kubernetes
+([__devdrake__](https://github.com/lovethedrake/devdrake), for instance does not
+rely on Kubernetes) nor presume or require pipeline authors to be competent
+Kubernetes users.
