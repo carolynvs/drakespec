@@ -21,7 +21,6 @@ until its eventual 1.0 release.
 
 1. [Purpose and Goals](purpose-and-goals.md)
 1. [Overview and Terminology](overview-and-terminology.md)
-1. [General Requirements for Compliant Products](general-requirements.md)
 1. [Jobs](jobs.md)
 1. [Pipelines](pipelines.md)
 1. [Pipeline Triggers](pipeline-triggers.md)
