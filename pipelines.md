@@ -180,12 +180,34 @@ the onset of every pipeline's execution. If applicable, source code is cloned
 to the shared volume and the shared volume is mounted into every job's
 container.
 
-__The DrakeSpec authors readily acknowledge that the two implementations
-discussed above have significant shortcomings. Network attached storage, for
-instance, is notoriously slow and likely to be a limiting factor for many
-implementations of DrakeSpec-compliant pipeline executors.  In acknowledging
-this, the DrakeSpec authors also wish to urge caution as this section of the
-spec is likely to evolve signigicantly in subsequent releases.__
+__The DrakeSpec authors readily acknowledge some difficulties with this section
+of the specification.__
+
+__For one, the example implementations cited above have significant
+shortcomings. Network attached storage, for instance, is notoriously slow and
+likely to be a limiting factor for many implementations of DrakeSpec-compliant
+pipeline executors.  Mounting a local directory into containers "contaminates"
+the local working directory, potentially tainting the results of _future_
+pipeline executions, which _should_ be completely isolated from prior pipeline
+executions.__
+
+__Shortcomings of the example implementations aside, the authors further
+acknowledge the shared storage requirement, as currently written, to be
+inadequate to support many potential improvements to the specification that are
+already under consideration. For instance, the shared storage requirement, as
+currently written, would not facilitate reliable re-execution of a failed job or
+resumption of a failed pipeline because failed jobs would be re-executed with
+state contaminated by its own prior execution and (potentially) prior execution
+of other jobs in the pipeline. Reliable re-execution of a failed job
+realistically requires something like a layered file system to permit shared
+storage to be returned to the state it was in prior to the first (failed)
+execution of the job.__
+
+__In acknowledging the shortcomings of the referenced implementations of the
+shared storage requirement, and more specifically, the limitations of the
+requirement itself, as currently written, the DrakeSpec authors wish to urge
+caution as this section of the spec is likely to evolve signigicantly in
+subsequent releases.__
 
 ### Order of Job Execution
 
@@ -202,3 +224,15 @@ any number of jobs concurrently.
 If execution of a job within a pipeline fails or times out, DrakeSpec-compliant pipeline executors MUST permit execution of any concurrently executing jobs to
 continue until completion or timeout. All pending jobs MUST immediately be
 canceled, even if the failed job(s) were not among their dependencies.
+
+### Re-Executing Jobs / Resuming Failed Pipelines
+
+This current draft of the specification requires that DrakeSpec-compliant
+pipeline executors MUST NOT permit re-execution of a failed job and MUST NOT
+offer functionality for "resuming" execution of a pipeline that has failed due
+to job failure or timeout. Pipelines MUST only be executed as atomic units.
+
+__This requirement is a direct consequence of current limitations in the [shared
+storage requirement](#shared-storage). The DrakeSpec authors wish to urge
+caution as this section of the spec is likely to evolve signigicantly in
+subsequent releases.__
