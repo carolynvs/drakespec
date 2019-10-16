@@ -48,15 +48,15 @@ the DrakeSpec.
 
 ### The Drake DSL
 
-__The Drake DSL__ is a YAML-based domain specific language for the declarative
+__The Drake DSL__ is a YAML-based domain-specific language for the declarative
 definition of [__DrakeSpec-compliant__](#drakespec-compliant)
 [__pipelines__](#pipelines).
 
 ### Pipelines
 
 __Pipelines__ are the heart and soul of the DrakeSpec. A pipeline is a directed
-graph of related [__jobs__](#jobs) which are executed as a means to some end.
-For instance, a pipeline might be used to execute a suite of quality checks
+graph of inter-dependent [__jobs__](#jobs) which are executed as a means to some
+end. For instance, a pipeline might be used to execute a suite of quality checks
 (e.g. unit tests, integration tests, lint checks) on a software project or to
 effect release, distribution, or deployment of such a project. These are common
 examples, but pipelines are open-ended in terms of what they might accomplish.
