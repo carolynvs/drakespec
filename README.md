@@ -14,9 +14,12 @@ Together, we will usher in a new era of pipeline portability!
 
 ## THIS SPEC IS HIGHLY VOLATILE!
 
-This specification is currently under heavy development. Adopters should be
-warned that breaking changes to this specification are likely at any point up
-until its eventual 1.0 release.
+__This specification is currently under heavy development.__
+
+__Adopters should be warned that breaking changes to this specification are
+likely with ANY minor release prior to 1.0.0 and MUST NOT assume compliance with
+a recent pre-1.0.0 release implies compliance with any _earlier_ pre-1.0.0
+releases.__
 
 ## Table of Contents
 

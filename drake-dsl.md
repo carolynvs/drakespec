@@ -74,19 +74,20 @@ utilize the top-level `version` field to explicitly denote compliance with a
 given version of the DrakeSpec.
 
 If a `Drakefile.yaml` omits the `version` field or utilizes it with a value
-denoting a newer version of the specification than a DrakeSpec-compliant
-pipeline consumer is able to support, that consumer MUST proactively reject it
-during parsing or validation. DrakeSpec-compliant pipeline executors MUST NOT
-execute any actions prescribed by jobs and/or pipelines defined within such a
-`Drakefile.yaml`.
+denoting either an older or newer version of the specification than a
+DrakeSpec-compliant pipeline consumer is able to support, that consumer MUST
+proactively reject it during parsing or validation. DrakeSpec-compliant pipeline
+executors MUST NOT execute any actions prescribed by jobs and/or pipelines
+defined within such a `Drakefile.yaml`.
 
 Note that DrakeSpec-compliant pipeline consumers MUST accept a
 `Drakefile.yaml`'s claim of being compliant with a given version of the
 DrakeSpec at face value. This is to say, if a `Drakefile.yaml` indicated
 compliance with a newer version, unsupported by the consumer, but incidentally
 did not leverage any newer Drake DSL features unsupported by the consumer, the
-consumer is NOT obligated to recognize this and MUST reject such a
-`Drakefile.yaml` as unsupported.
+consumer MUST still reject such a `Drakefile.yaml` as unsupported.
+DrakeSpec-compliant pipeline executors MUST NOT make a "best effort" to execute
+the pipelines defined within such a `Drakefile.yaml`.
 
 ### jobs
 
