@@ -30,7 +30,9 @@ the Drake DSL.
 
 ## Top-Level Fields
 
-This section describes valid use of the top-level fields of a `Drakefile.yaml`.
+This section describes the top-level fields of a `Drakefile.yaml`, including
+valid use of each field by pipeline producers and correct interpretation and use
+of each field by DrakeSpec-compliant executors and other consumers.
 
 Pipeline producers MUST utilize fields only as prescribed in order to define
 DrakeSpec-compliant pipelines. The Drake DSL reserves all undocumented fields
