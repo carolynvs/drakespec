@@ -31,65 +31,59 @@ the Drake DSL.
 ## Top-Level Fields
 
 This section describes the top-level fields of a `Drakefile.yaml`, including
-valid use of each field by pipeline producers and correct interpretation and use
-of each field by DrakeSpec-compliant executors and other consumers.
+valid use of each field by producers and correct interpretation and use of each
+field by DrakeSpec-compliant executors and other consumers.
 
-Pipeline producers MUST utilize fields only as prescribed in order to define
-DrakeSpec-compliant pipelines. The Drake DSL reserves all undocumented fields
-for future use. As such, pipeline producers MUST NOT utilize any
+Producers MUST utilize fields only as prescribed in order to define
+DrakeSpec-compliant jobs and/or pipelines. The Drake DSL reserves all
+undocumented fields for future use. As such, producers MUST NOT utilize any
 as-yet-undefined fields.
 
-DrakeSpec-compliant pipeline consumers MUST interpret fields only as prescribed
-and MUST proactively reject all invalid `Drakefile.yaml` during parsing or
-validation. DrakeSpec-compliant pipeline executors MUST NOT execute any actions
-prescribed by jobs and/or pipelines defined within an invalid `Drakefile.yaml`.
+DrakeSpec-compliant consumers MUST interpret fields only as prescribed and MUST
+reject all invalid and/or unsupported `Drakefile.yaml` during parsing or
+validation and MUST report that rejection through any implementation-defined
+means, which could include, for example, output or system logs.
 
-### uri
+DrakeSpec-compliant executors MUST NOT execute any jobs or pipelines defined
+within an invalid or unsupported `Drakefile.yaml`.
 
-__Field name:__ `uri`<br/>
+### `specUri`
+
+__Field name:__ `specUri`<br/>
 __Field type:__ `string`<br/>
 __Required:__ Y<br/>
 __Allowed values:__ `github.com/lovethedrake/drakespec`<br/>
 
-Because it is an open specification, the DrakeSpec's authors acknowledge that it
-could, realistically, be forked in the future. In anticipation of that
-possibility, pipeline producers MUST utilize the top-level `uri` field with a
-value of `github.com/lovethedrake/drakespec` to explicitly denote compliance
-with the DrakeSpec (as opposed to compliance with one of its forks).
+Producers MUST populate the top-level `specUri` field with the value
+`github.com/lovethedrake/drakespec` to explicitly signal compliance with the
+DrakeSpec (as opposed to a future, hypothetical fork of the specification).
 
-If a `Drakefile.yaml` omits the `uri` field or utilizes it with a value other
-than `github.com/lovethedrake/drakespec`, DrakeSpec-compliant pipeline consumers
-MUST proactively reject it during parsing or validation. DrakeSpec-compliant
-pipeline executors MUST NOT execute any actions prescribed by jobs and/or
-pipelines defined within such a `Drakefile.yaml`.
+If the `specUri` field is left undefined or contains a value other than
+`github.com/lovethedrake/drakespec`, DrakeSpec-compliant consumers MUST reject
+it during parsing or validation and MUST report that rejection through any
+implementation-defined means, which could include, for example, output or system
+logs.
 
-### version
+### `specVersion`
 
-__Field name:__ `version`<br/>
+__Field name:__ `specVersion`<br/>
 __Field type:__ `string`<br/>
 __Required:__ Y<br/>
 __Allowed values:__ `vX.Y.Z`
 
-Because the DrakeSpec authors anticipate the specification evolving over time,
-with a succession of semantically versioned releases, pipeline producers MUST
-utilize the top-level `version` field to explicitly denote compliance with a
-given version of the DrakeSpec.
+Producers MUST populate the top-level `specVersion` field with a value that
+claims compliance with a specific version of the DrakeSpec. Because the
+DrakeSpec authors anticipate the specification evolving over time, with a
+succession of semantically versioned releases, this requirement helps mitigate
+the possibility of any DrakeSpec compliant consumer attempting to consume a
+`Drakefile.yaml` that it cannot support.
 
-If a `Drakefile.yaml` omits the `version` field or utilizes it with a value
-denoting either an older or newer version of the specification than a
-DrakeSpec-compliant pipeline consumer is able to support, that consumer MUST
-proactively reject it during parsing or validation. DrakeSpec-compliant pipeline
-executors MUST NOT execute any actions prescribed by jobs and/or pipelines
-defined within such a `Drakefile.yaml`.
-
-Note that DrakeSpec-compliant pipeline consumers MUST accept a
-`Drakefile.yaml`'s claim of being compliant with a given version of the
-DrakeSpec at face value. This is to say, if a `Drakefile.yaml` indicated
-compliance with a newer version, unsupported by the consumer, but incidentally
-did not leverage any newer Drake DSL features unsupported by the consumer, the
-consumer MUST still reject such a `Drakefile.yaml` as unsupported.
-DrakeSpec-compliant pipeline executors MUST NOT make a "best effort" to execute
-the pipelines defined within such a `Drakefile.yaml`.
+If the `specVersion` field is left undefined or contains a value claiming
+compliance with an older or newer version of the specification than a
+DrakeSpec-compliant consumer is able to support, that consumer MUST reject it
+during parsing or validation and MUST report that rejection through any
+implementation-defined means, which could include, for example, output or system
+logs.
 
 ### jobs
 
@@ -97,8 +91,10 @@ __Field name:__ `jobs`<br/>
 __Field type:__ `map[string]`[`Job`](jobs.md)<br/>
 __Required:__ N<br/>
 
-The top-level `jobs` field MAY contain a map of `Job` objects keyed by name. By
-definition, a `Drakefile.yaml` with no `jobs` is a _trivial_ `Drakefile.yaml`.
+Job producers MAY populate the top-level `jobs` field with a map of `Job`
+objects keyed by name. A `Drakefile.yaml` object with no values in the `jobs`
+field is currently considered valid by this specification, but is, by
+definition, a trivial `Drakefile.yaml` that could serve no practical purpose.
 
 Jobs are such a critical concept within the DrakeSpec that `Job` objects are
 discussed in-depth in their own [section](jobs.md).
@@ -109,8 +105,11 @@ __Field name:__ `pipelines`<br/>
 __Field type:__ `map[string]`[`Pipeline`](pipelines.md)<br/>
 __Required:__ N<br/>
 
-The top-level `pipelines` field MAY contain a map of `Pipelines` objects keyed
-by name.
+Pipeline producers MAY populate the top-level `pipelines` field with a map of
+`Pipelines` objects keyed by name. A `Drakefile.yaml` object with no values in
+the `pipelines` field is considered valid by this specification since some some
+DrakeSpec-compliant executors or consumers may be capable of executing or
+otherwise consuming jobs independently of any pipeline.
 
 Pipelines are such a critical concept within the DrakeSpec that `Pipeline`
 objects are discussed in-depth in their own [section](pipelines.md).
