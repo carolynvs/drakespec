@@ -68,8 +68,8 @@ discussed in more detail in their own [section](pipelines.md).
 
 Along with [__pipelines__](#pipelines), __jobs__ are the other most fundamental
 concept in the DrakeSpec. Jobs are _containerized_ tasks. In other words, they
-are tasks that execute within OCI containers. (Or in some cases, execute in an
-OCI container with one or more additional containers acting in a supporting
+are tasks that execute within an OCI container. (Or in some cases, execute in an
+OCI container with one or more additional OCI containers acting in a supporting
 role.) A job might be used to execute a single, discrete bit of work such as
 unit testing, compiling source to a binary, or uploading a build artifact to
 object storage. These are common examples, but jobs are open-ended in terms of

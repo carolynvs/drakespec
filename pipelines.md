@@ -12,7 +12,13 @@ but `Pipeline`s are open-ended in terms of what they might accomplish.
 
 This section describes the fields of a `Pipeline` object.
 
-### triggers
+### Implied name field
+
+A `Pipeline` object has no intrinsic `name` field nor any other intrinsic
+identifier, but does have an extrinsic name that is implied by its key in the
+enclosing `Drakefile.yaml`'s `pipelines` map.
+
+### `triggers`
 
 __Field name:__ `triggers`<br/>
 __Field type:__ `[]`[`PipelineTrigger`](pipeline-triggers.md)<br/>
@@ -51,7 +57,7 @@ but _does_ execute any pipeline upon explicit request by a user.
 Triggers are such a critical concept within the DrakeSpec that `PipelineTrigger`
 objects are discussed in-depth in their own [section](pipeline-triggers.md).
 
-### jobs
+### `jobs`
 
 __Field name:__ `jobs`<br/>
 __Field type:__ `[]`[`PipelineJob`](#pipelinejob-fields.md)<br/>
@@ -61,22 +67,23 @@ The `jobs` field of a `Pipeline` object MAY contain an ordered list of
 `PipelineJob` objects. `PipelineJob` objects reference a [`Job`](jobs.md) object
 by name and may optionally enumerate the job's dependencies on other jobs.
 
-Note that pipelines are _directed graphs_ of inter-dependent jobs, but because
-directed graphs are difficult to represent textually, the DrakeSpec authors have
-opted to use an ordered list for the `jobs` field since order implies a notion
-of "flow" through a pipeline. This notion is further aided by a requirement that
-all jobs with dependencies are preceded by (are "downstream from") the jobs upon
-which they depend. (You can read more about this in the documentation for the
-[`dependencies`](#dependencies) field of the `PipelineJob` type.) _However_, it
-should be noted that DrakeSpec-compliant pipeline executors MAY actually execute
-jobs in any order and MAY execute multiple jobs concurrently so long as no job
-is ever executed prior to its dependencies.
+Note that `Pipeline`s are, conceptually, _directed graphs_ of inter-dependent
+`Job`s, but because directed graphs are difficult to represent textually, the
+DrakeSpec authors have opted to use an ordered list for the `jobs` field since
+order implies a notion of "flow" through a pipeline. This notion is further
+aided by a requirement that all jobs with dependencies are preceded by (are
+"downstream from") the jobs upon which they depend. (You can read more about
+this in the documentation for the [`dependencies`](#dependencies) field of the
+`PipelineJob` type.) _However_, it should be noted that DrakeSpec-compliant
+pipeline executors MAY actually execute jobs in any order and MAY execute
+multiple jobs concurrently so long as no job is ever executed prior to its
+dependencies.
 
 ## `PipelineJob` Fields
 
 This section describes the fields of a `PipelineJob` object.
 
-### name
+### `name`
 
 __Field name:__ `name`<br/>
 __Field type:__ `string`<br/>
@@ -87,7 +94,7 @@ The value of the `name` field of a `PipelineJob` object MUST reference a defined
 Any value for the `name` field is invalid if it does not reference a defined
 `Job` object.
 
-### dependencies
+### `dependencies`
 
 __Field name:__ `dependencies`<br/>
 __Field type:__ `string`<br/>
@@ -108,7 +115,7 @@ possibility of defining a dependency cycle.
 
 ## General Runtime Requirements for Pipeline Execution
 
-This section captures the general requirements DrakeSpecc-compliant pipeline
+This section captures the general requirements DrakeSpec-compliant pipeline
 executors must meet, with special emphasis on requirements not covered well by
 the preceding discussion of pipeline-related types.
 
