@@ -12,7 +12,9 @@ _compositions_ of `Job`s.
 
 ## `Job` Fields
 
-This section describes the fields of a `Job` object.
+This section describes the fields of a `Job` object, including valid use of each
+field by pipeline producers and correct interpretation and use of each field by
+DrakeSpec-compliant executors and other consumers.
 
 ### Implied name field
 
@@ -63,8 +65,10 @@ primary container's main process.
 
 ## `Container` Fields
 
-This section describes the fields of a `Container` object that represents an
-OCI container.
+This section describes the fields of a `Container` object that represents an OCI
+container, including valid use of each field by pipeline producers and correct
+interpretation and use of each field by DrakeSpec-compliant executors and other
+consumers.
 
 ### `name`
 
