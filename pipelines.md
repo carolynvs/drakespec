@@ -12,7 +12,7 @@ but `Pipeline`s are open-ended in terms of what they might accomplish.
 
 This section describes the fields of a `Pipeline` object, including valid use of
 each field by pipeline producers and correct interpretation and use of each
-field by DrakeSpec-compliant executors and other consumers.
+field by DrakeSpec-compliant pipeline executors and other consumers.
 
 ### Implied name field
 
