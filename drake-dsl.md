@@ -104,9 +104,9 @@ __Field type:__ `map[string]`[`Job`](jobs.md)<br/>
 __Required:__ N<br/>
 
 Job producers MAY populate the top-level `jobs` field with a map of `Job`
-objects keyed by name. A `Drakefile.yaml` object with no values in the `jobs`
-field is currently considered valid by this specification, but is, by
-definition, a trivial `Drakefile.yaml` that could serve no practical purpose.
+objects keyed by name. Configuration with no values in the top-level `jobs`
+field is considered valid by this specification, but is, by definition, a
+trivial configuration that could serve no practical purpose.
 
 Jobs are such a critical concept within the DrakeSpec that `Job` objects are
 discussed in-depth in their own [section](jobs.md).
