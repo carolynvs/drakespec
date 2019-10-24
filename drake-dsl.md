@@ -85,6 +85,18 @@ during parsing or validation and MUST report that rejection through any
 implementation-defined means, which could include, for example, output or system
 logs.
 
+### snippets
+
+__Field name:__ `snippets`<br/>
+__Field type:__ `map[string]object`<br/>
+__Required:__ N<br/>
+
+Producers MAY populate the `snippets` field with a map of arbitrary objects
+indexed by string keys. By doing so, producers gain the opportunity to utilize
+YAML anchors to author configuration that is tidy and free of DRY ("don't repeat
+yourself") violations _without_ illegally utilizing undocumented fields-- all of
+which are reserved by the specification for future use.
+
 ### jobs
 
 __Field name:__ `jobs`<br/>
