@@ -31,11 +31,11 @@ __Required:__ N<br/>
 Job producers MAY populate the `containers` field of a `Job` object with an
 ordered list of `Container` objects, each of which describes an OCI container
 that plays a role in execution of the `Job`. A `Job` object with no values in
-the `containers` field is currently considered valid by this specification, but
-is, by definition, a trivial `Job` that could serve no purpose. For `Job`
-objects having one or more `Container` objects in the `containers` field, the
-_last_ `Container` object is special among all others in the same collection and
-is counted as the `Job`'s _primary container_. All remaining containers are
+the `containers` field is considered valid by this specification, but is, by
+definition, a trivial `Job` that could serve no purpose. For `Job` objects
+having one or more `Container` objects in the `containers` field, the _last_
+`Container` object is special among all others in the same collection and is
+counted as the `Job`'s _primary container_. All remaining containers are
 considered _supporting containers_. (These are also, colloquially, known as
 "sidecar containers.")
 

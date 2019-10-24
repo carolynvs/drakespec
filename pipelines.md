@@ -69,9 +69,9 @@ Pipeline producers MAY populate the `jobs` field of a `Pipeline` object with an
 ordered list of `PipelineJob` objects. `PipelineJob` objects reference a
 [`Job`](jobs.md) object from the enclosing `Drakefile.yaml`'s `jobs` map by name
 and may optionally enumerate dependencies on other `Jobs` (also referenced by
-name). A `Pipeline` object with no values in the `jobs` field is currently
-considered valid by this specification, but is, by definition, a trivial
-`Pipeline` that could serve no purpose.
+name). A `Pipeline` object with no values in the `jobs` field is considered
+valid by this specification, but is, by definition, a trivial `Pipeline` that
+could serve no purpose.
 
 Note that `Pipeline`s are, conceptually, _directed graphs_ of inter-dependent
 `Job`s, but because directed graphs are difficult to represent textually, the
