@@ -63,6 +63,45 @@ DrakeSpec-compliant job executors MUST forcefully terminate _all_ supporting
 containers (if any) that remain running upon conclusion of the primary
 container's main process.
 
+### `sourceMountMode`
+
+__Field name:__ `sourceMountMode`<br/>
+__Field type:__ `string`<br/>
+__Required:__ N<br/>
+__Allowed values:__ `RO`, `COPY`, `RW`<br/>
+__Default value:__ `RO`<br/>
+
+Job producers MAY populate the `sourceMountMode` field of a `Job` object with
+a value that indicates how any applicable application source should be mounted
+into any of the job's containers which may require source code.
+
+For any job with one or more containers requiring access to any applicable
+source code (per the `sourceMountPath` field), DrakeSpec-compliant job executors
+MUST mount that source into the corresponding OCI container in accord with the
+following rules:
+
+| `sourceMountMode` | Method |
+|-------------------|--------|
+| `RO` | For each of a job's applicable containers, the source MUST be mounted to the indicated paths in the corresponding OCI containers _in a read-only fashion_ that prevents mutation of the source. |
+| `COPY` | One exact copy of the source MUST be created (through implementation-defined means) for each job. For each of a job's applicable containers, that copy MUST be mounted to the indicated paths in the corresponding OCI containers. Original source MUST NOT be mutated. |
+| `RW` | For each of a job's applicable containers, the source MUST be mounted to the indicated paths in the corresponding OCI containers _in a writable fashion_ that permits mutation of the source. Jobs utilizing this source mount mode are ineligible for execution within the context of a pipeline. |
+
+Note: Jobs are not generally intended to mutate source code. Within the context
+of a pipeline, this general expectation permits every job to assume it is
+operating upon code that has not been altered in any way by "upstream" jobs.
+(The DrakeSpec defines a separate mechanism-- shared storage-- that is intended
+to facilitate a clean "hand-off" of build artifacts from any job within a
+pipeline to "downstream" jobs.) The `RO` and `COPY` source mount modes offer
+varying levels of flexibility and performance, while preventing any job from
+mutating source code. In the event that it is desired for a job to directly
+alter source code, it may utilize the `RW` source mount mode, but by doing so
+becomes ineligible for use within a pipeline. Such a job might still be
+independently executable by some job executors. This can, for instance, be an
+effective means of containerizing workflow element that mutate source code at
+development time. For example, the DrakeSpec authors have a habit of "vendoring"
+third-party libraries and frequently utilize jobs with an `RW` source mount mode
+to effect dependency resolution at development time.
+
 ## `Container` Fields
 
 This section describes the fields of a `Container` object that represents an OCI
@@ -287,51 +326,55 @@ __Field name:__ `sourceMountPath`<br/>
 __Field type:__ `string`<br/>
 __Required:__ N<br/>
 
-Job producers MAY populate `sourceMountPath` field of a `Container` object to
-indicate where within the corresponding OCI container's file system any
+Job producers MAY populate the `sourceMountPath` field of a `Container` object
+to indicate where within the corresponding OCI container's file system any
 applicable source code should be mounted.
 
-If a value is specified for the `sourceMountPath` field of a `Container` and the
-value is `true`, DrakeSpec-compliant job executors MUST mount applicable source
-code to the specified path within the corresponding OCI container's file system.
-If these conditions are not met, DrakeSpec-compliant job executors MUST NOT
-mount source code into the corresponding OCI container's file system at any
-location.
+If a non-empty value is specified for the `sourceMountPath` field of a
+`Container`, DrakeSpec-compliant job executors MUST mount applicable source code
+to the specified path within the corresponding OCI container's file system and
+MUST mount it in a manner that complies with the `sourceMountMode` of the
+encloding `Job` object. If the `sourceMountPath` field of a `Container` is
+undefined or empty, DrakeSpec-compliant job executors MUST NOT mount source code
+into the corresponding OCI container's file system at any location.
 
-The specific method of mounting applicable source code into the corresponding
-OCI container's file system is deliberately unspecified and left
+The specific method of locating and mounting applicable source code into the
+corresponding OCI container's file system is deliberately unspecified and left
 implementation-defined. It is useful to examine two very different
 implementations of this requirement for the sake of example.
 
-[__DevDrake__](https://github.com/lovethedrake/devdrake) implements this by
-mounting the local working directory into the corresponding OCI container's file
-system.
+[__DevDrake__](https://github.com/lovethedrake/devdrake) implements this by bind
+mounting the working directory (for the `RO` source mount mode) or a copy of the
+working directory (for the `COPY` source mount mode) from the the host's file
+system into the container's file system.
 
-[__BrigDrake__](https://github.com/lovethedrake/devdrake) implements this by
-cloning applicable source code to a pipeline's network-attached shared storage
-at the onset of every pipeline's execution, then mounting that into the file
-system of every OCI container of every job within that pipeline having a
-non-empty value for the `sourceMountPath` field.
+[__BrigDrake__](https://github.com/lovethedrake/brigdrake) implements this by
+utilizing an "init container" to clone a source code as indicated by incoming
+GitHub webhook events.
 
-__The DrakeSpec authors readily acknowledge some difficulties with this section
-of the specification.__
+### `sharedStorageMountPath`
 
-__For one, the example implementations cited above have significant
-shortcomings. Network attached storage, for instance, is notoriously slow and
-likely to be a limiting factor for many implementations of DrakeSpec-compliant
-job executors.  Both approaches may also permit jobs to mutate and thereby
-"contaminate" source code, potentially tainting the results of "downstream" jobs
-if executed within the context of a pipeline.__
+__Field name:__ `sharedStorageMountPath`<br/>
+__Field type:__ `string`<br/>
+__Required:__ N<br/>
 
-__Shortcomings of the example implementations aside, the authors further
-acknowledge that the entire jobs/pipelines model is likely easier to rationalize
-if jobs execute in complete isolation from one another (with the exception of
-well-define shared storage, which is inadequately defined at present). This
-being the case, jobs requiring source code to be mounted to their OCI
-container(s) file systems likely benefit from always having a "fresh" copy of
-the source. The specification does not currently account for this.__
+Job producers MAY populate the `sharedStorageMountPath` field of a `Container`
+object to indicate where within the corresponding OCI container's file system a
+shared storage volume should be mounted.
 
-__In acknowledging the shortcomings of the referenced implementations of the of
-this requirement, and more specifically, the limitations of the requirement
-itself, as currently written, the DrakeSpec authors wish to urge caution as this
-section of the spec is likely to evolve signigicantly in subsequent releases.__
+If a non-empty value is specified for the `sharedStorageMountPath` field of a
+`Container`, DrakeSpec-compliant job executors MUST mount a shared storage
+volume to the specified path within the corresponding OCI container's file
+system. For DrakeSpec-compliant job executors that are also DrakeSpec-compliant
+pipeline executors, one and only one such volume MUST be provisioned per
+pipeline and mounted to the specified path within all applicable containers of
+all applicable jobs. For all other DrakeSpec-compliant job executors (i.e. those
+executing standalone jobs), such a volume MUST still be provisioned (even though
+it will not be shared across multiple jobs) and MUST still be mounted to the
+specified path within all applicable containers.
+
+__Note: The DrakeSpec authors anticipate significant changes to the spec as it
+relates to shared storage-- namely, they anticipate requiring "layered" storage
+that enables re-execution of a failed job by returning to the state it was in
+prior to initial execution of that job. Due to this, the authors urge caution as
+this section of the specification is very likely to change.__

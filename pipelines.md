@@ -183,56 +183,17 @@ other in any way.
 
 ### Shared Storage
 
-For each pipeline identified for execution, Drakespec-compliant pipeline
-executors MUST provide shared storage wherein artifacts produced by any given
-job within the pipeline may be relayed to downstream jobs within the same
-pipeline.
+For each pipeline identified for execution, if any container of any job therein
+indicates a dependency on shared storage (by providing a non-empty value for the
+`sharedStorageMountPath` field), Drakespec-compliant pipeline executors MUST
+provision a shared volume that MUST be mounted to the file system of all such
+containers at the indicated path.
 
-If applicable per the applicable third-party trigger specification, project
-source code MAY be written to shared storage. It is useful to examine two very
-different implementations of this requirement for the sake of example.
-
-[__DevDrake__](https://github.com/lovethedrake/devdrake) satifies the shared
-storage requirement by mounting the local working directory into every job's
-container. While this particular implementation has the potential to interfere
-with the requirement that multiple pipelines executing concurrently must do so
-in isolation, DevDrake avoids this particular difficulty by never executing
-multiple pipelines concurrently.
-
-[__BrigDrake__](https://github.com/lovethedrake/devdrake) satisfies the shared
-storage requirement differently-- by provisioning network attached storage at
-the onset of every pipeline's execution. If applicable, source code is cloned
-to the shared volume and the shared volume is mounted into every job's
-container.
-
-__The DrakeSpec authors readily acknowledge some difficulties with this section
-of the specification.__
-
-__For one, the example implementations cited above have significant
-shortcomings. Network attached storage, for instance, is notoriously slow and
-likely to be a limiting factor for many implementations of DrakeSpec-compliant
-pipeline executors.  Mounting a local directory into containers "contaminates"
-the local working directory, potentially tainting the results of _future_
-pipeline executions, which _should_ be completely isolated from prior pipeline
-executions.__
-
-__Shortcomings of the example implementations aside, the authors further
-acknowledge the shared storage requirement, as currently written, to be
-inadequate to support many potential improvements to the specification that are
-already under consideration. For instance, the shared storage requirement, as
-currently written, would not facilitate reliable re-execution of a failed job or
-resumption of a failed pipeline because failed jobs would be re-executed with
-state contaminated by its own prior execution and (potentially) prior execution
-of other jobs in the pipeline. Reliable re-execution of a failed job
-realistically requires something like a layered file system to permit shared
-storage to be returned to the state it was in prior to the first (failed)
-execution of the job.__
-
-__In acknowledging the shortcomings of the referenced implementations of the
-shared storage requirement, and more specifically, the limitations of the
-requirement itself, as currently written, the DrakeSpec authors wish to urge
-caution as this section of the spec is likely to evolve signigicantly in
-subsequent releases.__
+__Note: The DrakeSpec authors anticipate significant changes to the spec as it
+relates to shared storage-- namely, they anticipate requiring "layered" storage
+that enables re-execution of a failed job by returning to the state it was in
+prior to initial execution of that job. Due to this, the authors urge caution as
+this section of the specification is very likely to change.__
 
 ### Order of Job Execution
 
@@ -246,18 +207,20 @@ any number of jobs concurrently.
 
 ### Handling Job Failure
 
-If execution of a job within a pipeline fails or times out, DrakeSpec-compliant pipeline executors MUST permit execution of any concurrently executing jobs to
+If execution of a job within a pipeline fails or times out, DrakeSpec-compliant
+pipeline executors MUST permit execution of any concurrently executing jobs to
 continue until completion or timeout. All pending jobs MUST immediately be
 canceled, even if the failed job(s) were not among their dependencies.
 
 ### Re-Executing Jobs / Resuming Failed Pipelines
 
-This current draft of the specification requires that DrakeSpec-compliant
-pipeline executors MUST NOT permit re-execution of a failed job and MUST NOT
-offer functionality for "resuming" execution of a pipeline that has failed due
-to job failure or timeout. Pipelines MUST only be executed as atomic units.
+DrakeSpec-compliant pipeline executors MUST NOT permit re-execution of a failed
+job and MUST NOT offer functionality for "resuming" execution of a pipeline that
+has failed due to job failure or timeout. Pipelines MUST only be executed as
+atomic units.
 
-__This requirement is a direct consequence of current limitations in the [shared
-storage requirement](#shared-storage). The DrakeSpec authors wish to urge
-caution as this section of the spec is likely to evolve signigicantly in
-subsequent releases.__
+__This requirement is a direct consequence of the [shared storage
+requirement](#shared-storage) not (yet) sufficiently addressing how the state of
+the shared storage volume can be restored to the correct state prior to
+re-execution of such a job. The DrakeSpec authors wish to urge caution as this
+section of the spec is likely to evolve signigicantly in subsequent releases.__
