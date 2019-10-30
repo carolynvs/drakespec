@@ -198,33 +198,37 @@ OCI image and by the OCI runtime.
 ### `command`
 
 __Field name:__ `command`<br/>
-__Field type:__ `string`<br/>
+__Field type:__ `[]string`<br/>
 __Required:__ N<br/>
 
-Job producers MAY populate the `command` field of a `Container` object with a
-`string` value specifying the command and any applicable arguments that should
-be utilized to launch the main process of the corresponding OCI container.
+Job producers MAY populate the `command` field of a `Container` object with an
+ordered list of `string` values that collectively specify the command for
+launching the main process of the corresponding OCI container. The
+[`args`](#args) field MAY be used to provide further arguments to the command.
 
-If defined, DrakeSpec-compliant job executors MUST parse the value of the
-`command` field of a `Container` object to determine the command and any
-applicable arguments used to launch the main process of the corresponding OCI
+If defined, DrakeSpec-compliant job executors MUST utilize the values of the
+`command` field of a `Container` object as the `ENTRYPOINT` of the corresponding
+OCI container. If undefined, DrakeSpec-compliant job executors MUST leave the
+same undefined when launching the corresponding OCI container-- in which case
+behavior with respect to this field is determined by the details of the OCI
+image and by the OCI runtime.
+
+### `args`
+
+__Field name:__ `args`<br/>
+__Field type:__ `[]string`<br/>
+__Required:__ N<br/>
+
+Job producers MAY populate the `args` field of a `Container` object with an
+ordered list of arguments to the `ENTRYPOINT` (see [`command`](#command)) of the
+corresponding OCI container.
+
+If defined, DrakeSpec-compliant job executors MUST utilize the values of the
+`args` field of a `Container` object as the `CMD` of the corresponding OCI
 container. If undefined, DrakeSpec-compliant job executors MUST leave the same
 undefined when launching the corresponding OCI container-- in which case
 behavior with respect to this field is determined by the details of the OCI
 image and by the OCI runtime.
-
-Note: The `command` field of a `Container` object, contrasted with other
-familiar methods of declaratively defining OCI containers (e.g. `compose.yaml`,
-Kubernetes manifests, etc.), is simple-- being of type `string` instead of an
-ordered list of `string` values with (perhaps) a complementary ordered list of
-`string` command arguments. This simplicity was a deliberate choice on the part
-of the DrakeSpec's authors, who wished to discourage the temptation for job
-producers to define complex commands inline using a tangled mess of quotes and
-escape characters that may not be intuitively parsable by human users. The
-DrakeSpec authors actively encourage job producers to use short, simple commands
-in the `command` field of a `Container` object and delegate complexity to
-scripts. __This decision may be revisited in future drafts of the spec if it
-proves to be an undesireable constraint.__
 
 ### `tty`
 
