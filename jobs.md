@@ -22,44 +22,55 @@ A `Job` object has no intrinsic `name` field nor any other intrinsic
 identifier, but does have an extrinsic name that is implied by its key in the
 enclosing `Drakefile.yaml`'s `job` map.
 
-### `containers`
+### `primaryContainer`
 
-__Field name:__ `containers`<br/>
+__Field name:__ `primaryContainer`<br/>
+__Field type:__ [`Container`](#container)<br/>
+__Required:__ Y<br/>
+
+Job producers MUST populate the `primaryContainer` field of a `Job` object with
+a `Container` object that describes an OCI container.
+
+DrakeSpec-compliant job executors MUST launch an OCI container corresponding to
+the `Container` object in the `primaryContainer` field. DrakeSpec-compliant job
+executors MUST consider a `Job` to be complete when the main process of the
+primary container completes or an implementation-defined timeout interval has
+elapsed. DrakeSpec-compliant job executors MUST determine success or failure of
+a `Job` on the basis of the exit code from the primary container's main process,
+with an exit code of `0` indicating success and all other values indicating
+failure.
+
+### `sidecarContainers`
+
+__Field name:__ `sidecarContainers`<br/>
 __Field type:__ `[]`[`Container`](#container)<br/>
 __Required:__ N<br/>
 
-Job producers MAY populate the `containers` field of a `Job` object with an
-ordered list of `Container` objects, each of which describes an OCI container
-that plays a role in execution of the `Job`. A `Job` object with no values in
-the `containers` field is considered valid by this specification, but is, by
-definition, a trivial `Job` that could serve no purpose. For `Job` objects
-having one or more `Container` objects in the `containers` field, the _last_
-`Container` object is special among all others in the same collection and is
-counted as the `Job`'s _primary container_. All remaining containers are
-considered _supporting containers_. (These are also, colloquially, known as
-"sidecar containers.")
+Job producers MAY populate the `sidecarContainers` field of a `Job` object with
+an ordered list of `Container` objects, each of which describes an OCI container
+that plays a supporting role in execution of the `Job`.
 
-Note: Suggested uses for supporting containers include executing long-running
-processes that the main process of the main container may depend on in some
+Note: Suggested uses for sidecar containers include executing long-running
+processes that the main process of the primary container may depend on in some
 fashion. For instance, a job that implements a suite of tests requiring access
 to a live database might execute the tests themselves in the primary container
-while hosting the database in a supporting container.
+while hosting the database in a sidecar container.
 
-For `Job` objects having more than one `Container` object in the `containers`
-field, DrakeSpec-compliant job executors MUST establish networking between the
-corresponding OCI containers that permits processes running in each to address
-open ports on all others using the local interface.
+For `Job` objects having more than one `Container` object in the
+`sidecarContainers` field, DrakeSpec-compliant job executors MUST establish
+networking among the primary container and all sidecar container that permits
+processes running in each to address open ports on all others using the local
+interface.
 
 DrakeSpec-compliant job executors MUST launch OCI containers corresponding to
-the `Container` objects in a `Job`'s `containers` field _in the order they are
-defined_. Necessarily, this means _all_ supporting containers (if any) are
-launched prior to the primary container. DrakeSpec-compliant job executors MUST
-consider a `Job` to be complete when the main process of the primary container
-completes or an implementation-defined timeout interval has elapsed.
-DrakeSpec-compliant job executors MUST determine success or failure of a `Job`
-on the basis of the exit code from the primary container's main process, with an
-exit code of `0` indicating success and all other values indicating failure.
-DrakeSpec-compliant job executors MUST forcefully terminate _all_ supporting
+the `Container` objects in a `Job`'s `sidecarContainers` field _in the order
+they are defined_. Although sidecar containers MUST be launched in the order
+they were defined, executors MUST NOT make any attempt to delay or defer
+launching of any container until the processes running in prior containers are
+running or otherwise ready. Ensuring coordination among processes is strictly
+the responsibility of job producers.
+
+DrakeSpec-compliant job executors MUST forcefully terminate _all_ sidecar
 containers (if any) that remain running upon conclusion of the primary
 container's main process.
 
@@ -117,9 +128,9 @@ __Required:__ Y<br/>
 
 Job producers MUST populate the `name` field of a `Container` with an identifier
 that is unique among all the `Container` objects within the enclosing `Job`'s
-`containers` field. The name serves as an end-user-recognizable identifier to
-assist in correlating any output from a `Job` to the specific OCI container that
-produced it.
+`primaryContainer` and `sidecarContainers` fields. The name serves as an
+end-user-recognizable identifier to assist in correlating any output from a
+`Job` to the specific OCI container that produced it.
 
 DrakeSpec-compliant job executors MUST clearly "label," "tag," or otherwise
 correlate all `Job` output to the specific OCI container that produced it. The
