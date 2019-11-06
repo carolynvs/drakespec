@@ -393,3 +393,152 @@ relates to shared storage-- namely, they anticipate requiring "layered" storage
 that enables re-execution of a failed job by returning to the state it was in
 prior to initial execution of that job. Due to this, the authors urge caution as
 this section of the specification is very likely to change.__
+
+### `resources`
+
+__Field name:__ `resources`<br/>
+__Field type:__ [`Resources`](#resources-fields)<br/>
+__Required:__ N<br/>
+__Default value:__ A default `Resources` object<br/>
+
+Job producers MAY populate the `resources` field of a `Container` object with a
+`Resources` object that encapsulates requests for CPU and memory allocation and
+CPU and memory limits for the corresponding OCI container.
+
+If the `resources` field of a `Container` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize a default `Resources` object
+whose state and behavior are described in the [`Resources`](#resources-fields)
+section below.
+
+## `Resources` Fields
+
+This section describes the fields of a `Resources` object that encapsulates
+requests for CPU and memory allocation and CPU and memory limits for an OCI
+container, including valid use of each field by job producers and correct
+interpretation and use of each field by DrakeSpec-compliant job executors and
+other job consumers.
+
+### `cpu`
+
+__Field name:__ `cpu`<br/>
+__Field type:__ [`CPU`](#cpu-fields)<br/>
+__Required:__ N<br/>
+__Default value:__ A default `CPU` object<br/>
+
+Job producers MAY populate the `cpu` field of a `Resources` object with a `CPU`
+object that encapsulates requests for CPU allocation and CPU limits for the OCI
+container corresponding to the enclosing `Container` object.
+
+If the `cpu` field of a `Resources` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize a default `CPU` object whose
+state and behavior are described in the [`CPU`](#cpu-fields) section below.
+
+### `memory`
+
+__Field name:__ `memory`<br/>
+__Field type:__ [`Memory`](#memory-fields)<br/>
+__Required:__ N<br/>
+__Default value:__ A default `Memory` object<br/>
+
+Job producers MAY populate the `memory` field of a `Resources` object with a
+`Memory` object that encapsulates requests for memory allocation and memory
+limits for the OCI container corresponding to the enclosing `Container` object.
+
+If the `memory` field of a `Memory` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize a default `Memory` object whose
+state and behavior are described in the [`Memory`](#memory-fields) section
+below.
+
+## `CPU` Fields
+
+This section describes the fields of a `CPU` object that encapsulates requests
+for CPU allocation and CPU limits for an OCI container, including valid use of
+each field by job producers and correct interpretation and use of each field by
+DrakeSpec-compliant job executors and other job consumers.
+
+### `requestedMillicores`
+
+__Field name:__ `requestedMillicores`<br/>
+__Field type:__ `integer`<br/>
+__Required:__ N<br/>
+__Default value:__ `100`<br/>
+
+Job producers MAY populate the `requestedMillicores` field of a `CPU` object
+with an integer value that represents a requested share of CPU, expressed as
+millicores (thousandths of a core).
+
+If the `requestedMillicores` field of a `CPU` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize the default value `100`.
+DrakeSpec-compliant job executors MUST utilize `requestedMillicores` when
+establishing the CPU shares (relative priority) to be requested for the OCI
+container corresponding to the enclosing `Container` object.
+
+DrakeSpec-compliant job executors MAY additionally utilize the
+`requestedMillicores` in making scheduling decisions.
+
+### `maxMillicores`
+
+__Field name:__ `maxMillicores`<br/>
+__Field type:__ `integer`<br/>
+__Required:__ N<br/>
+__Default value:__ `200`<br/>
+
+Job producers MAY populate the `maxMillicores` field of a `CPU` object with an
+integer value that represents a hard limit on share of CPU, expressed as
+millicores (thousandths of a core).
+
+If the `maxMillicores` field of a `CPU` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize the default value `200`.
+DrakeSpec-compliant job executors MUST utilize `maxMillicores` when establishing
+the quota (limit) on CPU time allocated to the OCI container corresponding to
+the enclosing `Container` object over any given time period.
+
+DrakeSpec-compliant job executors MAY additionally utilize the
+`maxMillicores` in making scheduling decisions.
+
+## `Memory` Fields
+
+This section describes the fields of a `Memory` object that encapsulates
+requests for memory allocation and memory limits for an OCI container, including
+valid use of each field by job producers and correct interpretation and use of
+each field by DrakeSpec-compliant job executors and other job consumers.
+
+### `requestedMegabytes`
+
+__Field name:__ `requestedMegabytes`<br/>
+__Field type:__ `integer`<br/>
+__Required:__ N<br/>
+__Default value:__ `128`<br/>
+
+Job producers MAY populate the `requestedMegabytes` field of a `Memory` object
+with an integer value that represents a requested share of memory, expressed in
+megabytes (1 x 10<sup>6</sup> bytes).
+
+If the `requestedMegabytes` field of a `Memory` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize the default value `128`.
+DrakeSpec-compliant job executors MAY utilize `requestedMillicores` when
+establishing the share of memory to be requested for the OCI container
+corresponding to the enclosing `Container` object.
+
+DrakeSpec-compliant job executors MAY additionally utilize the
+`requestedMegabytes` in making scheduling decisions.
+
+### `maxMegabytes`
+
+__Field name:__ `maxMegabytes`<br/>
+__Field type:__ `integer`<br/>
+__Required:__ N<br/>
+__Default value:__ `256`<br/>
+
+Job producers MAY populate the `maxMegabytes` field of a `Memory` object with an
+integer value that represents a requested share of memory, expressed in
+megabytes (1 x 10<sup>6</sup> bytes).
+
+If the `maxMegabytes` field of a `Memory` object is left undefined,
+DrakeSpec-compliant job executors MUST utilize the default value `256`.
+DrakeSpec-compliant job executors MUST utilize `maxMegabytes` when establishing
+the maximum memory that may be allocated to the OCI container corresponding to
+the enclosing `Container` object.
+
+DrakeSpec-compliant job executors MAY additionally utilize the `maxMegabytes` in
+making scheduling decisions.
