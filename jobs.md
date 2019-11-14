@@ -160,6 +160,23 @@ DrakeSpec-compliant job executors MUST NOT implement support for private image
 registries through any mechanism that requires credentials to appear within a
 `Drakefile.yaml`.
 
+### `imagePullPolicy`
+
+__Field name:__ `imagePullPolicy`<br/>
+__Field type:__ `string`<br/>
+__Required:__ N<br/>
+__Allowed values:__ `IfNotPresent`, `Always`<br/>
+__Default value:__ `IfNotPresent`<br/>
+
+Job producers MAY populate the `imagePullPolicy` field of a `Container` object
+with a value of `IfNotPresent` or `Always` to indicate whether job executors
+must, respectively, pull the OCI image specified by the `image` field only when
+that image does not already exist on the host or prior to every container
+launch.
+
+DrakeSpec-compliant job executors MUST honor the policy indicated by the
+`imagePullPolicy` field of a `Container` object.
+
 ### `environment`
 
 __Field name:__ `environment`<br/>
