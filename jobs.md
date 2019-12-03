@@ -113,6 +113,32 @@ development time. For example, the DrakeSpec authors have a habit of "vendoring"
 third-party libraries and frequently utilize jobs with an `RW` source mount mode
 to effect dependency resolution at development time.
 
+### `osFamily`
+
+__Field name:__ `osFamily`<br/>
+__Field type:__ `string`<br/>
+__Required:__ N<br/>
+__Allowed values:__ `linux`, `windows`<br/>
+__Default value:__ `linux`<br/>
+
+Job producers MAY populate the `osFamily` field of a `Job` object to explicitly
+indicate whether the container(s) described by the `primaryContainers` field and
+(optionally) the `sidecarContainers` field are (all) Linux containers (`linux`)
+or Windows containers (`windows`).
+
+Note that this is a _job-level_ field, meaning all containers for a given job
+must be of a single `osFamily`.
+
+DrakeSpec-compliant job executors MUST utilize the `osFamily` of a `Job` object
+to determine the `osFamily` for all of the job's containers. If the `osFamily`
+field is left undefined, DrakeSpec-compliant job executors MUST assume the
+`osFamily` to be `linux`. If a DrakeSpec-compliant job executor is unable to
+execute jobs for the indicated `osFamily` it MUST generate an appropriate error
+message and consider execution of the enclosing `Job` to have failed.
+
+Note: DrakeSpec-compliant job executors are NOT obligated to support all OS
+famililes.
+
 ## `Container` Fields
 
 This section describes the fields of a `Container` object that represents an OCI
