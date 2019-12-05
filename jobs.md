@@ -139,6 +139,30 @@ message and consider execution of the enclosing `Job` to have failed.
 Note: DrakeSpec-compliant job executors are NOT obligated to support all OS
 famililes.
 
+### `cpuArch`
+
+__Field name:__ `cpuArch`<br/>
+__Field type:__ `string`<br/>
+__Required:__ N<br/>
+__Default value:__ `amd64`<br/>
+
+Job producers MAY populate the `cpuArch` field of a `Job` object to explicitly
+indicate the CPU architecture for the container(s) described by the
+`primaryContainers` field and (optionally) the `sidecarContainers` field.
+
+Note that this is a _job-level_ field, meaning all containers for a given job
+must use the same CPU architecture.
+
+DrakeSpec-compliant job executors MUST utilize the `cpuArch` of a `Job` object
+to determine the CPU architecture for all of the job's containers. If the
+`cpuArch` field is left undefined, DrakeSpec-compliant job executors MUST assume
+the `cpuArch` to be `amd64`. If a DrakeSpec-compliant job executor is unable to
+execute jobs for the indicated CPU architecture it MUST generate an appropriate
+error message and consider execution of the enclosing `Job` to have failed.
+
+Note: DrakeSpec-compliant job executors are NOT obligated to support all CPU
+architectures.
+
 ## `Container` Fields
 
 This section describes the fields of a `Container` object that represents an OCI
